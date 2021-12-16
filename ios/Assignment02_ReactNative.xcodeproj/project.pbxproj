@@ -16,6 +16,16 @@
 		3F422FCEDAC742C4B27F41C9 /* RobotoMono-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A940F18AB5134FCDB7E9582E /* RobotoMono-Italic.ttf */; };
 		1B252A65195F47AB93FF1812 /* RobotoMono-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D8F624D434494FF7AE2511D3 /* RobotoMono-Light.ttf */; };
 		D9A28C4A77594F9A898EDE0E /* RobotoMono-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 051C053D7C944EF6A3895B78 /* RobotoMono-Thin.ttf */; };
+		DDE02C53318F4312A0308884 /* android.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F2287175430456786554AB8 /* android.png */; };
+		CB080C7738694021A2D6B3FB /* chess.png in Resources */ = {isa = PBXBuildFile; fileRef = 6BD345F9F3014C3FA6FB18A7 /* chess.png */; };
+		F52BDD7735A545138A6C9B14 /* cricket.png in Resources */ = {isa = PBXBuildFile; fileRef = D397F8DBD9E24F67B7391707 /* cricket.png */; };
+		03A33BC5C89C482CAF2AF158 /* dance.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E3B5921A049450BA4508FCB /* dance.png */; };
+		62279A2B161D48E5AD2F062E /* football.png in Resources */ = {isa = PBXBuildFile; fileRef = 6818C779963F47129CD29CA2 /* football.png */; };
+		AB9F66CDEC7941B193291E6C /* ios.png in Resources */ = {isa = PBXBuildFile; fileRef = ED696655DC06499AA1B7B24B /* ios.png */; };
+		471014DB1B0F45AE8B3BDC18 /* problem-solving.png in Resources */ = {isa = PBXBuildFile; fileRef = 01887AE524A34ABDA4D489FC /* problem-solving.png */; };
+		D76A5E70B3194DE69AE3958D /* singing.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F5F9E8D89774D248CE36B38 /* singing.png */; };
+		4E417343D42D45D390820BAE /* speed-skating.png in Resources */ = {isa = PBXBuildFile; fileRef = FB8B998EEC5D4E8CAA1B1F4C /* speed-skating.png */; };
+		26F9DEB717F6486D979A8952 /* RobotoMono-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B7E23593C914481EA3C55154 /* RobotoMono-Medium.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +54,16 @@
 		A940F18AB5134FCDB7E9582E /* RobotoMono-Italic.ttf */ = {isa = PBXFileReference; name = "RobotoMono-Italic.ttf"; path = "../assets/fonts/RobotoMono-Italic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		D8F624D434494FF7AE2511D3 /* RobotoMono-Light.ttf */ = {isa = PBXFileReference; name = "RobotoMono-Light.ttf"; path = "../assets/fonts/RobotoMono-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		051C053D7C944EF6A3895B78 /* RobotoMono-Thin.ttf */ = {isa = PBXFileReference; name = "RobotoMono-Thin.ttf"; path = "../assets/fonts/RobotoMono-Thin.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		7F2287175430456786554AB8 /* android.png */ = {isa = PBXFileReference; name = "android.png"; path = "../assets/icons/android.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		6BD345F9F3014C3FA6FB18A7 /* chess.png */ = {isa = PBXFileReference; name = "chess.png"; path = "../assets/icons/chess.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		D397F8DBD9E24F67B7391707 /* cricket.png */ = {isa = PBXFileReference; name = "cricket.png"; path = "../assets/icons/cricket.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		3E3B5921A049450BA4508FCB /* dance.png */ = {isa = PBXFileReference; name = "dance.png"; path = "../assets/icons/dance.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		6818C779963F47129CD29CA2 /* football.png */ = {isa = PBXFileReference; name = "football.png"; path = "../assets/icons/football.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		ED696655DC06499AA1B7B24B /* ios.png */ = {isa = PBXFileReference; name = "ios.png"; path = "../assets/icons/ios.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		01887AE524A34ABDA4D489FC /* problem-solving.png */ = {isa = PBXFileReference; name = "problem-solving.png"; path = "../assets/icons/problem-solving.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		3F5F9E8D89774D248CE36B38 /* singing.png */ = {isa = PBXFileReference; name = "singing.png"; path = "../assets/icons/singing.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		FB8B998EEC5D4E8CAA1B1F4C /* speed-skating.png */ = {isa = PBXFileReference; name = "speed-skating.png"; path = "../assets/icons/speed-skating.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		B7E23593C914481EA3C55154 /* RobotoMono-Medium.ttf */ = {isa = PBXFileReference; name = "RobotoMono-Medium.ttf"; path = "../assets/fonts/RobotoMono-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,6 +160,16 @@
 				A940F18AB5134FCDB7E9582E /* RobotoMono-Italic.ttf */,
 				D8F624D434494FF7AE2511D3 /* RobotoMono-Light.ttf */,
 				051C053D7C944EF6A3895B78 /* RobotoMono-Thin.ttf */,
+				7F2287175430456786554AB8 /* android.png */,
+				6BD345F9F3014C3FA6FB18A7 /* chess.png */,
+				D397F8DBD9E24F67B7391707 /* cricket.png */,
+				3E3B5921A049450BA4508FCB /* dance.png */,
+				6818C779963F47129CD29CA2 /* football.png */,
+				ED696655DC06499AA1B7B24B /* ios.png */,
+				01887AE524A34ABDA4D489FC /* problem-solving.png */,
+				3F5F9E8D89774D248CE36B38 /* singing.png */,
+				FB8B998EEC5D4E8CAA1B1F4C /* speed-skating.png */,
+				B7E23593C914481EA3C55154 /* RobotoMono-Medium.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -239,6 +269,16 @@
 				3F422FCEDAC742C4B27F41C9 /* RobotoMono-Italic.ttf in Resources */,
 				1B252A65195F47AB93FF1812 /* RobotoMono-Light.ttf in Resources */,
 				D9A28C4A77594F9A898EDE0E /* RobotoMono-Thin.ttf in Resources */,
+				DDE02C53318F4312A0308884 /* android.png in Resources */,
+				CB080C7738694021A2D6B3FB /* chess.png in Resources */,
+				F52BDD7735A545138A6C9B14 /* cricket.png in Resources */,
+				03A33BC5C89C482CAF2AF158 /* dance.png in Resources */,
+				62279A2B161D48E5AD2F062E /* football.png in Resources */,
+				AB9F66CDEC7941B193291E6C /* ios.png in Resources */,
+				471014DB1B0F45AE8B3BDC18 /* problem-solving.png in Resources */,
+				D76A5E70B3194DE69AE3958D /* singing.png in Resources */,
+				4E417343D42D45D390820BAE /* speed-skating.png in Resources */,
+				26F9DEB717F6486D979A8952 /* RobotoMono-Medium.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
