@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, TextInput, View, Button, ScrollView, Pressable, ActivityIndicator } from 'react-native'
+import { StyleSheet, Text, TextInput, View, Button, ScrollView, Pressable, ActivityIndicator, Image, Modal } from 'react-native'
 import RadioButtonRN from 'radio-buttons-react-native';
 import CheckBox from '@react-native-community/checkbox';
 import SelectDropdown from 'react-native-select-dropdown'
@@ -8,15 +8,28 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import ImagePicker from 'react-native-image-crop-picker';
 
 export default function JoinClub( {route} ) {
-    const [loader, setLoader] = useState(false)
-    const [name, setName] = useState('')
+    const [error, setError] = useState({
+        imageError:"",
+        nameError: "",
+        contactError: "",
+        emailError: "",
+        genderbtnError: "",
+        birthDateError: "",
+        payMethodError: "",
+        tandcError: "",
+    })
+
+    const [uri, setUri] = useState('')
+    const [name , setName] = useState('')
     const [contact, setContact] = useState('')
     const [email, setEmail] = useState('')
     const [gender, setGender] = useState('')
     const [birthDate, setBdate] = useState('')
-    const [uri, setUri] = useState(null)
-    const [paymethod, setPaymentMethod] = useState('')
+    const [payMethod, setPaymethod] = useState('')
+    const [imageOptions, setImageOptions] = useState(false)
+    const [loader, setLoader] = useState(false)
     const [isImageUploaded, setState] = useState('Upload your image')
+    const [isSubmitted, setSubmitted] = useState(false)
     const opt = [
         {
             label: 'male'
@@ -26,8 +39,9 @@ export default function JoinClub( {route} ) {
         }
     ]
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-
     const [isDateSelected, setDate] = useState('Select your Birth Date')
+    const [toggleCheckBox, setToggleCheckBox] = useState(false)
+    const paymentMethods = ['Net bancking', 'Google Pay', 'Paytm']
 
     const showDatePicker = () => {
         setDatePickerVisibility(true);
@@ -47,67 +61,124 @@ export default function JoinClub( {route} ) {
         hideDatePicker();
     };
 
-    const pickImage = () => {
-        ImagePicker.openPicker({
-            width: 300,
-            height: 400,
-            cropping: true
-        }).then(image => {
-            const temp = image.path
-            setUri({ temp })
-            setState('Image uploaded')
-        });
-    }
-    const [toggleCheckBox, setToggleCheckBox] = useState(false)
-    const paymentMethods = ['Net bancking', 'Google Pay', 'Paytm']
-
     const submit = () => {
-        if (name != '' && contact != '' && email != '' && gender != '' && birthDate != '' && uri != null && paymethod != '') {
+        if (name != '' && contact != '' && email != '' && gender != '' && birthDate != '' && uri != '' && payMethod != '') {
             if (validateEmail(email)) {
                 if (validateContact(contact)) {
                     if(isTandCChecked(toggleCheckBox)){
                         setLoader(true)
                         setTimeout(() => {
                             setLoader(false)
-                            alert('Your details are saved')
+                            setSubmitted(true)
                         }, 5000)
                     }
                 }
             }
         }
-        else alert('Please provide all details')
+        else {
+            alert('Please provide all details')
+        }
+    
     }
-
     const validateEmail = (email) => {
         const emailregex = '^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$'
-        if (email.match(emailregex)) return true
-        else alert("Please enter valid email id")
+        if (email.match(emailregex)) setError({emailError:""})
+        else setError({emailError:"Please enter valid email id"}) 
     }
 
     const validateContact = (contact) => {
-        if (contact.length == 10) return true
-        else alert('Contact number must be of 10 digits')
+        const contactregex = '^[0-9]{10}$'
+        if (contact.match(contactregex)) setError({contactError:""})
+        else setError({contactError:'Contact number must be of 10 digits'})
     }
 
-    const isTandCChecked = (c) => {
-        if(c!=true) alert("Pleact accept terms and conditions")
-        else return true
+    const takePhotoFromCamera = () => {
+        setImageOptions(false)
+        ImagePicker.openCamera({
+            width: 300,
+            height: 400,
+            cropping: true,
+          }).then(image => {
+            console.log(image);
+            setUri(image.path)
+            setError({imageError:''})
+            setState('')
+          });
     }
+
+    const selectFromGallery = () => {
+        setImageOptions(false)
+        ImagePicker.openPicker({
+            width: 300,
+            height: 400,
+            cropping: true
+          }).then(image => {
+            console.log(image);
+            setUri(image.path)
+            setError({imageError:''})
+            setState('')
+          })
+    }
+
+    function SelectedImage(){
+        return <Image source={{uri: uri}} style={styles.userImg}/>
+    }
+
+    function DefaultImage() {
+        return <Image source={require('../assets/icons/user.png')} style={styles.userImg}/>
+    }
+
+    function ShowImage(){
+        if (isImageUploaded=='') return <SelectedImage/>
+        else return <DefaultImage/>
+    }
+
+    function Submit(){
+        if (loader==true) return <ActivityIndicator size={20} color='white' animating={loader} />
+        else return <Text style={styles.submitTxt} onPress={submit}>Submit</Text>
+    }
+
     return (
         <View style={styles.form}>
-            <ActivityIndicator size={30} color='darkblue' animating={loader} te />
             <Text style={styles.head}>Register for {route.params.name} Club</Text>
             <ScrollView>
-                <TextInput style={styles.formInput} placeholder='Enter your name' onChangeText={name => { setName(name) }}></TextInput>
-                <TextInput style={styles.formInput} placeholder='Enter mobile number' keyboardType='numeric' onChangeText={m => { setContact(m) }}></TextInput>
-                <TextInput style={styles.formInput} placeholder='Enter your email' keyboardType='email-address' onChangeText={e => { setEmail(e) }}></TextInput>
+                <Pressable onPress={()=>setImageOptions(true)}>
+                    <ShowImage/>
+                    <Text style={styles.imgText}>{isImageUploaded}</Text>
+                    <Text style={styles.error}>{error.imageError}</Text>
+                </Pressable>
+                <Modal transparent={true} visible={imageOptions}>
+                 <View style={styles.imageOptionsbg}>
+                   <View style={styles.imageOptions}>
+                    <Pressable style={styles.imageOptionsBtn} onPress={takePhotoFromCamera}>
+                        <Text style={styles.imageOptionsTxt}>Camera</Text>
+                    </Pressable>
+                    <Pressable style={styles.imageOptionsBtn} onPress={selectFromGallery}>
+                        <Text style={styles.imageOptionsTxt}>Gallery</Text>
+                    </Pressable>
+                    <Pressable style={styles.imageOptionsBtn} onPress={()=>setImageOptions(false)}>
+                        <Text style={styles.imageOptionsTxt}>Cancel</Text>
+                    </Pressable>
+                   </View>
+                 </View>
+               </Modal>
+                <TextInput style={styles.formInput} placeholder='Enter your name' onChangeText={name=>{setName(name)}} autoCapitalize='words'></TextInput>
+                <Text style={styles.error}>{error.nameError}</Text>
+                <TextInput style={styles.formInput} placeholder='Enter mobile number' keyboardType='numeric' onChangeText={m => { setContact(m) }} maxLength={10}></TextInput>
+                <Text style={styles.error}>{error.contactError}</Text>
+                <TextInput style={styles.formInput} placeholder='Enter your email' keyboardType='email-address' onChangeText={e => { setEmail({e}) }} autoCapitalize='none'></TextInput>
+                <Text style={styles.error}>{error.emailError}</Text>
                 <RadioButtonRN
                     style={{ margin: 10 }}
                     data={opt}
                     textStyle={styles.rbtn}
-                    textColor='#212738'
+                    box={false}
+                    activeColor='#333'
+                    textColor = '#333'
+                    circleSize = {14}
                     selectedBtn={g=>setGender(g['label'])}
                 />
+                <Text style={styles.error}>{error.genderbtnError}</Text>
                 <View>
                     <Pressable onPress={showDatePicker}>
                         <Text style={styles.datePicker}>{isDateSelected}</Text>
@@ -118,16 +189,13 @@ export default function JoinClub( {route} ) {
                             onCancel={hideDatePicker}
                         />
                     </Pressable>
+                    <Text style={styles.error}>{error.birthDateError}</Text>
                 </View>
-                <View>
-                    <Pressable onPress={pickImage}>
-                        <Text style={styles.datePicker}>{isImageUploaded}</Text>
-                    </Pressable>
-                </View>
+               
                 <SelectDropdown
                     data={paymentMethods}
                     onSelect={(selectedItem, index) => {
-                        setPaymentMethod(selectedItem)
+                        setPaymethod(selectedItem)
                     }}
                     defaultButtonText={"Select payment methods"}
                     buttonTextAfterSelection={(selectedItem, index) => {
@@ -152,6 +220,7 @@ export default function JoinClub( {route} ) {
                     rowStyle={styles.dropdown1RowStyle}
                     rowTextStyle={styles.dropdown1RowTxtStyle}
                 />
+                <Text style={styles.error}>{error.payMethodError}</Text>
                 <View style={styles.tandc}>
                     <CheckBox
                         style={styles.checkbox}
@@ -163,12 +232,20 @@ export default function JoinClub( {route} ) {
                     />
                     <Text style={styles.input}>Accept Terms and Conditions</Text>
                 </View>
+                <Text style={styles.error}>{error.tandcError}</Text>
                 <View style={styles.btn}>
-                    <Button
-                        title='submit'
-                        onPress={submit}
-                    />
+                    <Pressable style={styles.submitbtn}>
+                        <Submit/>
+                    </Pressable>
                 </View>
+                <Modal transparent={true} visible={isSubmitted}>
+                    <View style={styles.imageOptionsbg}>
+                        <View style={styles.submitMessage}>
+                            <Text style={styles.submitMessageTxt}>Registration Succesfull!</Text>
+                            <Button title='   Ok   ' onPress={()=>setSubmitted(false)}/>
+                        </View>
+                    </View>
+                </Modal>
             </ScrollView>
         </View>
     )
@@ -189,14 +266,13 @@ const styles = StyleSheet.create({
     },
     formInput: {
         padding: 4,
-        marginTop: 20,
+        marginTop: 14,
         marginHorizontal: 10,
-        height: 50,
-        borderWidth: 1,
+        height: 40,
         fontFamily: 'RobotoMono-Medium',
-        fontSize: 20,
-        borderColor: '#333',
-        borderRadius: 5,
+        fontSize: 18,
+        borderBottomWidth: 1,
+        borderBottomColor: 'grey',
     },
     formbtn: {
         width: '30%',
@@ -216,7 +292,8 @@ const styles = StyleSheet.create({
     },
     rbtn: {
         fontFamily: 'RobotoMono-Medium',
-        fontSize: 20,
+        fontSize: 18,
+        color: 'grey'
     },
     btn: {
         margin: 10,
@@ -228,41 +305,66 @@ const styles = StyleSheet.create({
     },
     input: {
         marginLeft: 10,
-        fontSize: 20,
-        fontFamily: 'RobotoMono-medium'
+        fontSize: 18,
+        fontFamily: 'RobotoMono-medium',
     },
     tandc: {
         flexDirection: 'row',
-        marginTop: 5
+        marginTop: 10
     },
 
     dropdown1BtnStyle: {
         width: '95%',
-        height: 50,
-        margin: 10,
+        height: 40,
+        marginTop: 10,
+        marginHorizontal: 10,
         backgroundColor: "#FFF",
-        borderRadius: 8,
-        borderWidth: 1,
+        borderBottomWidth: 1,
         borderColor: "#333",
-        fontSize: 20
+        fontSize: 18
     },
-    dropdown1BtnTxtStyle: { color: "#444", textAlign: "left", fontFamily: 'RobotoMono-Medium' },
-    dropdown1DropdownStyle: { backgroundColor: "#EFEFEF" },
+    dropdown1BtnTxtStyle: { color: "grey", textAlign: "left", fontFamily: 'RobotoMono-Medium'},
+    dropdown1DropdownStyle: { backgroundColor: "#FBFBFF" },
     dropdown1RowStyle: {
-        backgroundColor: "#EFEFEF",
+        backgroundColor: "#FBFBFF",
         borderBottomColor: "#C5C5C5",
     },
-    dropdown1RowTxtStyle: { color: "#444", textAlign: "left", fontFamily: 'RobotoMono-Medium' },
+    dropdown1RowTxtStyle: { color: "#0d0106", textAlign: "left", fontFamily: 'RobotoMono-Medium' },
     datePicker: {
         flex: 1,
-        height: 50,
-        margin: 10,
+        height: 40,
+        marginTop: 10,
+        marginHorizontal: 10,
         width: '95%',
-        fontSize: 20,
+        fontSize: 18,
         fontFamily: 'RobotoMono-Medium',
-        borderRadius: 8,
-        borderWidth: 1,
+        borderBottomWidth: 1,
         borderColor: "#333",
         padding: 8
-    }
+    },
+    error :{
+        color: 'red',
+        marginLeft: 14
+    },
+    userImg :{
+        marginTop: 10,
+        width: 80,
+        height: 80,
+        alignSelf: 'center',
+        borderRadius: 50,
+        borderWidth: 1,
+        borderColor: 'grey'
+    },
+    imgText:{
+        alignSelf: 'center',
+        fontSize: 18
+    },
+    imageOptionsbg:{backgroundColor:"#000000aa", flex:1},
+    imageOptions:{alignItems :'center', justifyContent: 'space-evenly',backgroundColor:"#fff", marginVertical:200, marginHorizontal: 60, padding:30, flex:1, borderRadius:10},
+    imageOptionsBtn : {backgroundColor:'#657ed4', padding: 12, borderRadius: 4, width: '90%'},
+    imageOptionsTxt: {fontSize: 16,color:'#fff', textTransform: 'uppercase', fontWeight: '500',textAlign: 'center' },
+    submitbtn: {backgroundColor:'#57c4e5', padding: 10, borderRadius:6, marginBottom:6},
+    submitTxt: {color:"#fff",textTransform: 'uppercase', fontWeight: '500',textAlign: 'center', fontSize:16},
+    submitMessage: {alignItems :'center', justifyContent: 'space-evenly',backgroundColor:"#fff", marginVertical:250, marginHorizontal: 60, padding:30, flex:1, borderRadius:10},
+    submitMessageTxt: {color:'black', fontSize:18}
 })

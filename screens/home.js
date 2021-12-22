@@ -18,6 +18,7 @@
       navigation.navigate('JoinClub',{name:people[key]['club']});
    }
 
+   // functions for item
  
    return(
      <View style={styles.container}>
