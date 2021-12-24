@@ -63,8 +63,8 @@ export default function JoinClub( {route} ) {
 
     const submit = () => {
         if (name != '' && contact != '' && email != '' && gender != '' && birthDate != '' && uri != '' && payMethod != '') {
-            if (validateEmail(email)) {
-                if (validateContact(contact)) {
+            if (validateContact(contact)) {
+                if (validateEmail(email)) {
                     if(isTandCChecked(toggleCheckBox)){
                         setLoader(true)
                         setTimeout(() => {
@@ -80,16 +80,34 @@ export default function JoinClub( {route} ) {
         }
     
     }
-    const validateEmail = (email) => {
-        const emailregex = '^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$'
-        if (email.match(emailregex)) setError({emailError:""})
-        else setError({emailError:"Please enter valid email id"}) 
+    const validateEmail = (e) => {
+        console.log(e)
+        const emailRegex = /\S+@\S+\.\S+/
+        if(emailRegex.test(e)){
+            setError({emailError:""})
+            return true
+        }
+        else{
+            setError({emailError:"Please enter valid email id"}) 
+        }
     }
 
-    const validateContact = (contact) => {
-        const contactregex = '^[0-9]{10}$'
-        if (contact.match(contactregex)) setError({contactError:""})
-        else setError({contactError:'Contact number must be of 10 digits'})
+    const validateContact = (c) => {
+        const contactregex = /^[0-9]{10}$/
+        if(contactregex.test(c)){
+            setError({contactError:""})
+            return true
+        }else setError({contactError:'Contact number must be of 10 digits'})
+    }
+
+    const isTandCChecked = (t) =>{
+        if(toggleCheckBox){
+            setError({tandcError:""})
+            return true
+        }
+        else{
+            setError({tandcError:"Please accept terms and conditions to proceed"})
+        }
     }
 
     const takePhotoFromCamera = () => {
@@ -99,7 +117,6 @@ export default function JoinClub( {route} ) {
             height: 400,
             cropping: true,
           }).then(image => {
-            console.log(image);
             setUri(image.path)
             setError({imageError:''})
             setState('')
@@ -113,7 +130,6 @@ export default function JoinClub( {route} ) {
             height: 400,
             cropping: true
           }).then(image => {
-            console.log(image);
             setUri(image.path)
             setError({imageError:''})
             setState('')
@@ -166,7 +182,7 @@ export default function JoinClub( {route} ) {
                 <Text style={styles.error}>{error.nameError}</Text>
                 <TextInput style={styles.formInput} placeholder='Enter mobile number' keyboardType='numeric' onChangeText={m => { setContact(m) }} maxLength={10}></TextInput>
                 <Text style={styles.error}>{error.contactError}</Text>
-                <TextInput style={styles.formInput} placeholder='Enter your email' keyboardType='email-address' onChangeText={e => { setEmail({e}) }} autoCapitalize='none'></TextInput>
+                <TextInput style={styles.formInput} placeholder='Enter your email' keyboardType='email-address' onChangeText={e => { setEmail(e) }} autoCapitalize='none'></TextInput>
                 <Text style={styles.error}>{error.emailError}</Text>
                 <RadioButtonRN
                     style={{ margin: 10 }}
