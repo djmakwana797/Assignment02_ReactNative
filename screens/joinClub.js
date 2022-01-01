@@ -8,16 +8,15 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import ImagePicker from 'react-native-image-crop-picker';
 
 export default function JoinClub( {route} ) {
-    const [error, setError] = useState({
-        imageError:"",
-        nameError: "",
-        contactError: "",
-        emailError: "",
-        genderbtnError: "",
-        birthDateError: "",
-        payMethodError: "",
-        tandcError: "",
-    })
+
+    const [imageError, setimageError] = useState('')
+    const [nameError, setnameError] = useState('')
+    const [contactError, setcontactError] = useState('')
+    const [emailError, setemailError] = useState('')
+    const [genderbtnError, setgenderbtnError] = useState('')
+    const [birthDateError, setbirthDateError] = useState('')
+    const [payMethodError, setpayMethodError] = useState('')
+    const [tandcError, settandcError] = useState('')
 
     const [uri, setUri] = useState('')
     const [name , setName] = useState('')
@@ -58,56 +57,42 @@ export default function JoinClub( {route} ) {
         var year = tempD.getFullYear()
         setDate(date + '/' + month + '/' + year)
         setBdate(date + '/' + month + '/' + year)
+        setbirthDateError('')
         hideDatePicker();
     };
 
     const submit = () => {
-        if (name != '' && contact != '' && email != '' && gender != '' && birthDate != '' && uri != '' && payMethod != '') {
-            if (validateContact(contact)) {
-                if (validateEmail(email)) {
-                    if(isTandCChecked(toggleCheckBox)){
-                        setLoader(true)
-                        setTimeout(() => {
-                            setLoader(false)
-                            setSubmitted(true)
-                        }, 5000)
-                    }
-                }
-            }
+        name == '' ? setnameError('Name is required') : null
+        contact == '' ? setcontactError('Contact is required') : null
+        email == '' ? setemailError('Email is required') : null
+        gender == '' ? setgenderbtnError('Gender is required') : null
+        birthDate == '' ? setbirthDateError('BirthDate is required') : null
+        uri == '' ? setimageError('Image is required') : null
+        payMethod == '' ? setpayMethodError('Payment method is required') : null
+        toggleCheckBox == false ? settandcError('Please accept terms and conditions to proceed') : null
+        if(name!='' && email!='' && uri!='' && birthDate!='' && gender!='' && payMethod!='' && toggleCheckBox==true && contact!=''){
+            setLoader(true)
+            setTimeout(() => {
+                setLoader(false)
+                setSubmitted(true)
+            }, 5000)
         }
-        else {
-            alert('Please provide all details')
-        }
-    
     }
     const validateEmail = (e) => {
-        console.log(e)
+        setEmail(e)
         const emailRegex = /\S+@\S+\.\S+/
-        if(emailRegex.test(e)){
-            setError({emailError:""})
-            return true
-        }
-        else{
-            setError({emailError:"Please enter valid email id"}) 
-        }
+        emailRegex.test(e) ? setemailError("") : setemailError("Please enter valid email id") 
+    }
+
+    const validateName = (name) => {
+        setName(name)
+        name == '' ? setnameError('Name is required') : setnameError('')
     }
 
     const validateContact = (c) => {
+        setContact(c)
         const contactregex = /^[0-9]{10}$/
-        if(contactregex.test(c)){
-            setError({contactError:""})
-            return true
-        }else setError({contactError:'Contact number must be of 10 digits'})
-    }
-
-    const isTandCChecked = (t) =>{
-        if(toggleCheckBox){
-            setError({tandcError:""})
-            return true
-        }
-        else{
-            setError({tandcError:"Please accept terms and conditions to proceed"})
-        }
+        contactregex.test(c) ? setcontactError("") : setcontactError('Contact number must be of 10 digits')
     }
 
     const takePhotoFromCamera = () => {
@@ -118,7 +103,7 @@ export default function JoinClub( {route} ) {
             cropping: true,
           }).then(image => {
             setUri(image.path)
-            setError({imageError:''})
+            setimageError('')
             setState('')
           });
     }
@@ -131,37 +116,21 @@ export default function JoinClub( {route} ) {
             cropping: true
           }).then(image => {
             setUri(image.path)
-            setError({imageError:''})
+            setimageError('')
             setState('')
           })
-    }
-
-    function SelectedImage(){
-        return <Image source={{uri: uri}} style={styles.userImg}/>
-    }
-
-    function DefaultImage() {
-        return <Image source={require('../assets/icons/user.png')} style={styles.userImg}/>
-    }
-
-    function ShowImage(){
-        if (isImageUploaded=='') return <SelectedImage/>
-        else return <DefaultImage/>
-    }
-
-    function Submit(){
-        if (loader==true) return <ActivityIndicator size={20} color='white' animating={loader} />
-        else return <Text style={styles.submitTxt} onPress={submit}>Submit</Text>
     }
 
     return (
         <View style={styles.form}>
             <Text style={styles.head}>Register for {route.params.name} Club</Text>
-            <ScrollView>
+            <ScrollView showsVerticalScrollIndicator={false}>
                 <Pressable onPress={()=>setImageOptions(true)}>
-                    <ShowImage/>
+                    {isImageUploaded=='' ? <Image source={{uri: uri}} style={styles.userImg}/>
+                    :   <Image source={require('../assets/icons/user.png')} style={styles.userImg}/>
+                    }
                     <Text style={styles.imgText}>{isImageUploaded}</Text>
-                    <Text style={styles.error}>{error.imageError}</Text>
+                    {imageError != ''? <Text style={styles.error}>{imageError}</Text> : null}
                 </Pressable>
                 <Modal transparent={true} visible={imageOptions}>
                  <View style={styles.imageOptionsbg}>
@@ -178,12 +147,18 @@ export default function JoinClub( {route} ) {
                    </View>
                  </View>
                </Modal>
-                <TextInput style={styles.formInput} placeholder='Enter your name' onChangeText={name=>{setName(name)}} autoCapitalize='words'></TextInput>
-                <Text style={styles.error}>{error.nameError}</Text>
-                <TextInput style={styles.formInput} placeholder='Enter mobile number' keyboardType='numeric' onChangeText={m => { setContact(m) }} maxLength={10}></TextInput>
-                <Text style={styles.error}>{error.contactError}</Text>
-                <TextInput style={styles.formInput} placeholder='Enter your email' keyboardType='email-address' onChangeText={e => { setEmail(e) }} autoCapitalize='none'></TextInput>
-                <Text style={styles.error}>{error.emailError}</Text>
+
+                <Text style={styles.label}>Name </Text>
+                <TextInput style={styles.formInput} placeholder='Enter your name' onChangeText={name=>validateName(name)} autoCapitalize='words'></TextInput>
+                {nameError!='' ? <Text style={styles.error}>{nameError}</Text> : null}
+
+                <Text style={styles.label}>Contact </Text>
+                <TextInput style={styles.formInput} placeholder='Enter mobile number' keyboardType='numeric' onChangeText={m => validateContact(m)} maxLength={10}></TextInput>
+                {contactError!=''?<Text style={styles.error}>{contactError}</Text>:null}
+
+                <Text style={styles.label}>Email </Text>
+                <TextInput style={styles.formInput} placeholder='Enter your email' keyboardType='email-address' onChangeText={e =>  validateEmail(e)} autoCapitalize='none'></TextInput>
+                {emailError!=''?<Text style={styles.error}>{emailError}</Text>:null}
                 <RadioButtonRN
                     style={{ margin: 10 }}
                     data={opt}
@@ -192,9 +167,13 @@ export default function JoinClub( {route} ) {
                     activeColor='#333'
                     textColor = '#333'
                     circleSize = {14}
-                    selectedBtn={g=>setGender(g['label'])}
+                    selectedBtn={g=>{
+                        setGender(g['label'])
+                        setgenderbtnError('')
+                    }}
                 />
-                <Text style={styles.error}>{error.genderbtnError}</Text>
+                {genderbtnError!=''?<Text style={styles.error}>{genderbtnError}</Text>:null}
+                <Text style={styles.label}>Birth Date </Text>
                 <View>
                     <Pressable onPress={showDatePicker}>
                         <Text style={styles.datePicker}>{isDateSelected}</Text>
@@ -205,13 +184,15 @@ export default function JoinClub( {route} ) {
                             onCancel={hideDatePicker}
                         />
                     </Pressable>
-                    <Text style={styles.error}>{error.birthDateError}</Text>
+                    {birthDateError!=''?<Text style={styles.error}>{birthDateError}</Text>:null}
                 </View>
                
+                <Text style={styles.label}>Payment method </Text>
                 <SelectDropdown
                     data={paymentMethods}
                     onSelect={(selectedItem, index) => {
                         setPaymethod(selectedItem)
+                        setpayMethodError('')
                     }}
                     defaultButtonText={"Select payment methods"}
                     buttonTextAfterSelection={(selectedItem, index) => {
@@ -236,7 +217,7 @@ export default function JoinClub( {route} ) {
                     rowStyle={styles.dropdown1RowStyle}
                     rowTextStyle={styles.dropdown1RowTxtStyle}
                 />
-                <Text style={styles.error}>{error.payMethodError}</Text>
+                {payMethodError!=''?<Text style={styles.error}>{payMethodError}</Text>:null}
                 <View style={styles.tandc}>
                     <CheckBox
                         style={styles.checkbox}
@@ -244,14 +225,18 @@ export default function JoinClub( {route} ) {
                         value={toggleCheckBox}
                         onValueChange={(newValue) => {
                             setToggleCheckBox(newValue)
+                            settandcError('')
                         }}
                     />
                     <Text style={styles.input}>Accept Terms and Conditions</Text>
                 </View>
-                <Text style={styles.error}>{error.tandcError}</Text>
+                {tandcError!=''?<Text style={styles.error}>{tandcError}</Text>:null}
                 <View style={styles.btn}>
                     <Pressable style={styles.submitbtn}>
-                        <Submit/>
+                    {loader==true ? 
+                        <ActivityIndicator size={20} color='white' animating={loader} />
+                    :   <Text style={styles.submitTxt} onPress={submit}>Submit</Text>
+                    }
                     </Pressable>
                 </View>
                 <Modal transparent={true} visible={isSubmitted}>
@@ -282,7 +267,7 @@ const styles = StyleSheet.create({
     },
     formInput: {
         padding: 4,
-        marginTop: 14,
+        marginBottom: 4,
         marginHorizontal: 10,
         height: 40,
         fontFamily: 'RobotoMono-Medium',
@@ -320,6 +305,7 @@ const styles = StyleSheet.create({
         marginLeft: 5
     },
     input: {
+        marginTop: 4,
         marginLeft: 10,
         fontSize: 18,
         fontFamily: 'RobotoMono-medium',
@@ -332,7 +318,7 @@ const styles = StyleSheet.create({
     dropdown1BtnStyle: {
         width: '95%',
         height: 40,
-        marginTop: 10,
+        marginBottom: 10,
         marginHorizontal: 10,
         backgroundColor: "#FFF",
         borderBottomWidth: 1,
@@ -349,7 +335,7 @@ const styles = StyleSheet.create({
     datePicker: {
         flex: 1,
         height: 40,
-        marginTop: 10,
+        marginBottom: 10,
         marginHorizontal: 10,
         width: '95%',
         fontSize: 18,
@@ -382,5 +368,6 @@ const styles = StyleSheet.create({
     submitbtn: {backgroundColor:'#57c4e5', padding: 10, borderRadius:6, marginBottom:6},
     submitTxt: {color:"#fff",textTransform: 'uppercase', fontWeight: '500',textAlign: 'center', fontSize:16},
     submitMessage: {alignItems :'center', justifyContent: 'space-evenly',backgroundColor:"#fff", marginVertical:250, marginHorizontal: 60, padding:30, flex:1, borderRadius:10},
-    submitMessageTxt: {color:'black', fontSize:18}
+    submitMessageTxt: {color:'black', fontSize:18},
+    label:{marginLeft:10, marginTop: 4}
 })

@@ -24,6 +24,7 @@
      <View style={styles.container}>
        <Text style={styles.head}>Clubs</Text>
        <FlatList
+         showsVerticalScrollIndicator={false}
          keyExtractor={(item)=>item.key}
          data = {people}
          renderItem={({item})=>(
